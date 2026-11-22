@@ -295,8 +295,6 @@ stage.addEventListener("touchend", (e) => {
   touchX = null;
 });
 
-// Click the screenshot to open it full-size in a new tab
-img.addEventListener("click", () => window.open(img.src, "_blank", "noopener"));
 
 // Whole card is clickable (mouse, tap, Enter or Space)
 document.querySelectorAll(".card[data-project]").forEach((card) => {
