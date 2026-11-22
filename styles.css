@@ -256,7 +256,7 @@ body.modal-open { overflow: hidden; }
 .modal[open] { animation: pop .25s ease; }
 @keyframes pop { from { opacity: 0; transform: translateY(16px) scale(.98); } }
 .modal-inner {
-  max-height: inherit; overflow-y: auto; overscroll-behavior: contain;
+  max-height: inherit; overflow: hidden;
   display: grid; grid-template-columns: 1.35fr 1fr;
 }
 .modal-close {
@@ -298,7 +298,13 @@ body.modal-open { overflow: hidden; }
 .thumbs button:hover { opacity: .85; }
 .thumbs button.active { border-color: var(--accent); opacity: 1; }
 
-.modal-body { padding: 2rem 1.75rem 1.75rem; display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+.modal-body {
+  padding: 2rem 1.75rem 1.75rem; display: flex; flex-direction: column; gap: 1rem; min-width: 0;
+  /* On desktop only the details column scrolls; the gallery stays in view */
+  max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem);
+  overflow-y: auto; overscroll-behavior: contain;
+  scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+}
 .modal-body h3 { font-size: clamp(1.4rem, 3vw, 1.9rem); line-height: 1.2; padding-right: 2.5rem; }
 .modal-body p { color: var(--muted); }
 #pm-desc { display: grid; gap: .75rem; }
@@ -309,7 +315,8 @@ body.modal-open { overflow: hidden; }
 
 /* Tablet & phone: stack gallery above details, go (nearly) full-screen */
 @media (max-width: 860px) {
-  .modal-inner { grid-template-columns: 1fr; }
+  .modal-inner { grid-template-columns: 1fr; overflow-y: auto; overscroll-behavior: contain; }
+  .modal-body { max-height: none; overflow: visible; }
   .gallery-stage.mobile-shot { aspect-ratio: 4 / 5; }
 }
 @media (max-width: 560px) {
