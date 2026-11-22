@@ -218,7 +218,7 @@ const PROJECTS = {
     links: [{ label: "GitHub", href: GITHUB, primary: true }],
     shots: [
       { src: "images/fitindia/1.png", caption: "Membership page, desktop" },
-      { src: "images/fitindia/2.png", caption: "Membership page, mobile", mobile: true },
+      // { src: "images/fitindia/2.png", caption: "Membership page, mobile", mobile: true },
     ],
   },
 };
