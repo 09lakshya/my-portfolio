@@ -305,7 +305,7 @@ function closeViewer() {
   img.focus({ preventScroll: true });
 }
 img.addEventListener("click", openViewer);
-viewer.addEventListener("click", closeViewer); // click anywhere (image or background) to close
+viewer.querySelector(".viewer-close").addEventListener("click", closeViewer); // only the ✕ (or Esc) closes it
 
 // Swipe between screenshots on touch screens
 [stage, viewer].forEach((el) => {
