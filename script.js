@@ -141,7 +141,10 @@ draw();
 
 /* ================= PROJECT DETAILS MODAL =================
    To add screenshots: drop images into images/<project>/ and list them under "shots".
-   Use mobile: true for phone-sized screenshots so they display at phone proportions. */
+   Use mobile: true for phone-sized screenshots so they display at phone proportions.
+   After replacing or editing a screenshot, bump SHOTS_VERSION so browsers load the new file. */
+const SHOTS_VERSION = 2;
+const shotUrl = (src) => `${src}?v=${SHOTS_VERSION}`;
 const GITHUB = "https://github.com/09lakshya";
 const PROJECTS = {
   invexo: {
@@ -236,11 +239,11 @@ function showShot(i) {
   if (!shots.length) return;
   idx = (i + shots.length) % shots.length;
   const s = shots[idx];
-  img.src = s.src;
+  img.src = shotUrl(s.src);
   img.alt = s.caption;
   stage.classList.toggle("mobile-shot", !!s.mobile);
   $("pm-caption").textContent = `${s.caption}  ·  ${idx + 1} / ${shots.length}`;
-  viewerImg.src = s.src;
+  viewerImg.src = shotUrl(s.src);
   viewerImg.alt = s.caption;
   $("pm-viewer-caption").textContent = $("pm-caption").textContent;
   $("pm-thumbs").querySelectorAll("button").forEach((b, j) => b.classList.toggle("active", j === idx));
@@ -267,7 +270,7 @@ function openProject(key) {
   closeViewer();
   $("pm-caption").textContent = "";
   $("pm-thumbs").innerHTML = shots
-    .map((s, j) => `<button aria-label="Screenshot ${j + 1}: ${s.caption}"><img src="${s.src}" alt="" loading="lazy" /></button>`)
+    .map((s, j) => `<button aria-label="Screenshot ${j + 1}: ${s.caption}"><img src="${shotUrl(s.src)}" alt="" loading="lazy" /></button>`)
     .join("");
   $("pm-thumbs").querySelectorAll("button").forEach((b, j) => b.addEventListener("click", () => showShot(j)));
   stage.classList.remove("mobile-shot");
