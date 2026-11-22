@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Lakshya Hindocha — AI/ML Engineer</title>
+  <meta name="description" content="Lakshya Hindocha — B.Tech AI & ML student building full-stack AI products with Python, PyTorch, FastAPI and React." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230d0f14'/><text x='50' y='66' font-size='52' text-anchor='middle' fill='%237cf2c4' font-family='monospace' font-weight='700'>LH</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <canvas id="net" aria-hidden="true"></canvas>
+
+  <header class="nav">
+    <a href="#top" class="logo">lh<span>.</span></a>
+    <button class="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav"><span></span><span></span><span></span></button>
+    <nav id="site-nav">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=lakshyahindocha@gmail.com&amp;su=Hello%20Lakshya%20%E2%80%94%20from%20your%20portfolio" target="_blank" rel="noopener" data-compose>Contact</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <p class="mono kicker">&gt; hello, world</p>
+      <h1>Lakshya Hindocha</h1>
+      <h2>I build <span class="typed" id="typed">AI-powered products</span><span class="caret">|</span></h2>
+      <p class="lead">
+        B.Tech student in Artificial Intelligence &amp; Machine Learning,
+        turning models into full-stack apps — from FinBERT sentiment pipelines to CLIP-powered outfit recommenders.
+      </p>
+      <div class="cta">
+        <a class="btn primary" href="#projects">View projects</a>
+        <a class="btn" href="resume.pdf" target="_blank" rel="noopener">Download résumé</a>
+      </div>
+      <ul class="socials">
+        <li><a href="https://github.com/09lakshya" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://linkedin.com/in/lakshya-hindocha" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=lakshyahindocha@gmail.com&amp;su=Hello%20Lakshya%20%E2%80%94%20from%20your%20portfolio" target="_blank" rel="noopener" data-compose>Email</a></li>
+      </ul>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="reveal">
+      <h3 class="section-title"><span class="mono">01.</span> About</h3>
+      <div class="about-grid">
+        <div>
+          <p>
+            I'm an AI/ML undergrad (class of 2028) who enjoys the whole journey of a machine-learning idea:
+            wrangling the data, training the model, and then shipping it behind a clean API and a
+            friendly interface.
+          </p>
+          <p>
+            My recent work spans financial ML for Indian markets, computer vision for fashion, and NLP —
+            and I've also helped design AI &amp; coding curriculum, which taught me how to explain complex
+            ideas simply.
+          </p>
+        </div>
+        <ul class="stats">
+          <li><strong>4+</strong><span>projects shipped</span></li>
+          <li><strong>15+</strong><span>tools &amp; frameworks</span></li>
+          <li><strong>AI/ML</strong><span>B.Tech, 2024–2028</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience" class="reveal">
+      <h3 class="section-title"><span class="mono">02.</span> Experience</h3>
+      <div class="timeline">
+        <article class="t-item">
+          <div class="t-meta mono">Mar 2026 — Jun 2026</div>
+          <div>
+            <h4>AI/Coding Program Intern</h4>
+            <p class="org">Catalyst Learning Solutions Inc. (Learn NGK)</p>
+            <p>Designed curriculum and hands-on learning materials for AI and coding programs.</p>
+          </div>
+        </article>
+      </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="reveal">
+      <h3 class="section-title"><span class="mono">03.</span> Projects</h3>
+      <div class="cards">
+        <article tabindex="0" role="button" data-project="invexo" class="card featured">
+          <div class="card-top">
+            <span class="mono tag">Featured · FinTech ML</span>
+            <span class="ext" aria-hidden="true">↗</span>
+          </div>
+          <h4>Invexo</h4>
+          <p>
+            AI-powered stock analysis platform for Indian markets (NSE/BSE). Combines market indicators,
+            XGBoost price prediction and FinBERT news-sentiment analysis, served by a FastAPI backend
+            with a Next.js/React frontend.
+          </p>
+          <ul class="chips"><li>Next.js</li><li>React</li><li>Python</li><li>FastAPI</li><li>XGBoost</li><li>FinBERT</li></ul>
+          <span class="more mono">View details &amp; screenshots →</span>
+        </article>
+
+        <article tabindex="0" role="button" data-project="stylesync" class="card featured">
+          <div class="card-top">
+            <span class="mono tag">Featured · Computer Vision</span>
+            <span class="ext" aria-hidden="true">↗</span>
+          </div>
+          <h4>StyleSync — Smart Digital Wardrobe</h4>
+          <p>
+            Digital wardrobe that recommends personalised outfits using CLIP image representations.
+            Includes image upload &amp; storage (Cloudinary), user authentication and SQLAlchemy persistence.
+          </p>
+          <ul class="chips"><li>React</li><li>FastAPI</li><li>PyTorch</li><li>CLIP</li><li>SQLAlchemy</li></ul>
+          <span class="more mono">View details &amp; screenshots →</span>
+        </article>
+
+        <article tabindex="0" role="button" data-project="sip" class="card">
+          <div class="card-top">
+            <span class="mono tag">Finance tool</span>
+            <span class="ext" aria-hidden="true">↗</span>
+          </div>
+          <h4>SIP / SWP Calculator</h4>
+          <p>Web calculator that estimates SIP investment growth and SWP withdrawal outcomes.</p>
+          <ul class="chips"><li>React</li></ul>
+          <span class="more mono">View details &amp; screenshots →</span>
+        </article>
+
+        <article tabindex="0" role="button" data-project="fitindia" class="card">
+          <div class="card-top">
+            <span class="mono tag">Web</span>
+            <span class="ext" aria-hidden="true">↗</span>
+          </div>
+          <h4>FIT INDIA</h4>
+          <p>Responsive front-end web project promoting fitness, built from scratch.</p>
+          <ul class="chips"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+          <span class="more mono">View details &amp; screenshots →</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="reveal">
+      <h3 class="section-title"><span class="mono">04.</span> Skills</h3>
+      <div class="skills">
+        <div class="skill-group"><h5 class="mono">languages</h5><ul class="chips"><li>Python</li><li>C++</li><li>JavaScript</li></ul></div>
+        <div class="skill-group"><h5 class="mono">ai / ml &amp; data</h5><ul class="chips"><li>PyTorch</li><li>TensorFlow</li><li>Keras</li><li>Scikit-learn</li><li>XGBoost</li><li>OpenCV</li><li>spaCy</li><li>NLTK</li><li>NumPy</li><li>Pandas</li><li>Matplotlib</li></ul></div>
+        <div class="skill-group"><h5 class="mono">web</h5><ul class="chips"><li>React</li><li>Next.js</li><li>FastAPI</li><li>HTML</li><li>CSS</li></ul></div>
+        <div class="skill-group"><h5 class="mono">databases</h5><ul class="chips"><li>MySQL</li><li>MongoDB</li><li>SQLAlchemy</li></ul></div>
+        <div class="skill-group"><h5 class="mono">tools</h5><ul class="chips"><li>Git</li><li>GitHub</li><li>VS Code</li><li>Jupyter</li><li>Google Colab</li></ul></div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="reveal contact">
+      <h3 class="section-title"><span class="mono">05.</span> Contact</h3>
+      <p class="big">Let's build something intelligent.</p>
+      <p>I'm open to internships, research collaborations and interesting AI projects. My inbox is always open.</p>
+      <a class="btn primary" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=lakshyahindocha@gmail.com&amp;su=Hello%20Lakshya%20%E2%80%94%20from%20your%20portfolio" target="_blank" rel="noopener" data-compose>Say hello</a>
+    </section>
+  </main>
+
+  <!-- PROJECT DETAILS MODAL -->
+  <dialog id="project-modal" class="modal" aria-labelledby="pm-title">
+    <div class="modal-inner">
+      <button class="modal-close" aria-label="Close">✕</button>
+      <div class="gallery">
+        <div class="gallery-stage">
+          <img id="pm-img" alt="" />
+          <p class="gallery-empty mono" hidden>Screenshots coming soon</p>
+          <button class="g-nav prev" aria-label="Previous screenshot">‹</button>
+          <button class="g-nav next" aria-label="Next screenshot">›</button>
+        </div>
+        <p id="pm-caption" class="caption mono"></p>
+        <div id="pm-thumbs" class="thumbs"></div>
+      </div>
+      <div class="modal-body">
+        <span id="pm-tag" class="mono tag"></span>
+        <h3 id="pm-title"></h3>
+        <div id="pm-desc"></div>
+        <ul id="pm-features" class="features"></ul>
+        <ul id="pm-tech" class="chips"></ul>
+        <div id="pm-links" class="cta"></div>
+      </div>
+    </div>
+  </dialog>
+
+  <footer>
+    <p class="mono">© <span id="year"></span> Lakshya Hindocha</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
