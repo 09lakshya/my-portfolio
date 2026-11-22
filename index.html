@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=2" />
+  <link rel="stylesheet" href="styles.css?v=3" />
 </head>
 <body>
   <canvas id="net" aria-hidden="true"></canvas>
@@ -181,6 +181,14 @@
         <p id="pm-caption" class="caption mono"></p>
         <div id="pm-thumbs" class="thumbs"></div>
       </div>
+      <!-- Full-screen screenshot viewer (opens when the screenshot is clicked) -->
+      <div id="pm-viewer" class="viewer" hidden>
+        <img id="pm-viewer-img" alt="" />
+        <p id="pm-viewer-caption" class="caption mono"></p>
+        <button class="viewer-close" aria-label="Close full-screen view">✕</button>
+        <button class="g-nav prev" aria-label="Previous screenshot">‹</button>
+        <button class="g-nav next" aria-label="Next screenshot">›</button>
+      </div>
       <div class="modal-body">
         <span id="pm-tag" class="mono tag"></span>
         <h3 id="pm-title"></h3>
@@ -196,6 +204,6 @@
     <p class="mono">© <span id="year"></span> Lakshya Hindocha</p>
   </footer>
 
-  <script src="script.js?v=2"></script>
+  <script src="script.js?v=3"></script>
 </body>
 </html>

@@ -228,6 +228,8 @@ const $ = (id) => document.getElementById(id);
 const stage = modal.querySelector(".gallery-stage");
 const img = $("pm-img");
 const empty = modal.querySelector(".gallery-empty");
+const viewer = $("pm-viewer");
+const viewerImg = $("pm-viewer-img");
 let shots = [], idx = 0, lastFocus = null;
 
 function showShot(i) {
@@ -238,6 +240,9 @@ function showShot(i) {
   img.alt = s.caption;
   stage.classList.toggle("mobile-shot", !!s.mobile);
   $("pm-caption").textContent = `${s.caption}  ·  ${idx + 1} / ${shots.length}`;
+  viewerImg.src = s.src;
+  viewerImg.alt = s.caption;
+  $("pm-viewer-caption").textContent = $("pm-caption").textContent;
   $("pm-thumbs").querySelectorAll("button").forEach((b, j) => b.classList.toggle("active", j === idx));
 }
 
@@ -259,6 +264,7 @@ function openProject(key) {
   img.hidden = !has;
   empty.hidden = has;
   modal.querySelectorAll(".g-nav").forEach((b) => (b.hidden = shots.length < 2));
+  closeViewer();
   $("pm-caption").textContent = "";
   $("pm-thumbs").innerHTML = shots
     .map((s, j) => `<button aria-label="Screenshot ${j + 1}: ${s.caption}"><img src="${s.src}" alt="" loading="lazy" /></button>`)
@@ -278,21 +284,39 @@ modal.addEventListener("close", () => {
 });
 modal.querySelector(".modal-close").addEventListener("click", () => modal.close());
 modal.addEventListener("click", (e) => { if (e.target === modal) modal.close(); }); // backdrop click
-modal.querySelector(".prev").addEventListener("click", () => showShot(idx - 1));
-modal.querySelector(".next").addEventListener("click", () => showShot(idx + 1));
+modal.querySelectorAll(".g-nav.prev").forEach((b) => b.addEventListener("click", (e) => { e.stopPropagation(); showShot(idx - 1); }));
+modal.querySelectorAll(".g-nav.next").forEach((b) => b.addEventListener("click", (e) => { e.stopPropagation(); showShot(idx + 1); }));
 modal.addEventListener("keydown", (e) => {
   if (e.key === "ArrowLeft") showShot(idx - 1);
   if (e.key === "ArrowRight") showShot(idx + 1);
+  // Esc closes the full-screen view first, not the whole popup
+  if (e.key === "Escape" && !viewer.hidden) { e.preventDefault(); closeViewer(); }
 });
 
+// Click the screenshot to view it full-screen on the same page
+function openViewer() {
+  if (!shots.length) return;
+  viewer.hidden = false;
+  viewer.querySelector(".viewer-close").focus();
+}
+function closeViewer() {
+  if (viewer.hidden) return;
+  viewer.hidden = true;
+  img.focus({ preventScroll: true });
+}
+img.addEventListener("click", openViewer);
+viewer.addEventListener("click", closeViewer); // click anywhere (image or background) to close
+
 // Swipe between screenshots on touch screens
-let touchX = null;
-stage.addEventListener("touchstart", (e) => { touchX = e.touches[0].clientX; }, { passive: true });
-stage.addEventListener("touchend", (e) => {
-  if (touchX === null) return;
-  const dx = e.changedTouches[0].clientX - touchX;
-  if (Math.abs(dx) > 40) showShot(idx + (dx < 0 ? 1 : -1));
-  touchX = null;
+[stage, viewer].forEach((el) => {
+  let touchX = null;
+  el.addEventListener("touchstart", (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+  el.addEventListener("touchend", (e) => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 40) showShot(idx + (dx < 0 ? 1 : -1));
+    touchX = null;
+  });
 });
 
 
