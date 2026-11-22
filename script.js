@@ -162,7 +162,9 @@ const PROJECTS = {
     links: [{ label: "Visit live site", href: "https://invexo.co.in/", primary: true }, { label: "GitHub", href: GITHUB }],
     shots: [
       { src: "images/invexo/invexo1.png", caption: "Sign-in page, desktop" },
-      { src: "images/invexo/.png", caption: "Dashboard", mobile: true },
+      { src: "images/invexo/invexo2.png", caption: "Dashboard", mobile: true },
+      { src: "images/invexo/invexo3.png", caption: "AI Assistant", mobile: true },
+      { src: "images/invexo/invexo4.png", caption: "Reliance Stock card", mobile: true },
     ],
   },
   stylesync: {
@@ -182,9 +184,8 @@ const PROJECTS = {
     tech: ["React 19", "Vite", "TypeScript", "Tailwind CSS", "TanStack Query", "FastAPI", "SQLAlchemy", "PyTorch", "CLIP", "OpenCV"],
     links: [{ label: "GitHub", href: GITHUB, primary: true }],
     shots: [
-      { src: "images/stylesync/1.png", caption: "Sign-in page" },
-      { src: "images/stylesync/2.png", caption: "Account creation with style profile" },
-      { src: "images/stylesync/3.png", caption: "Sign-in page, mobile", mobile: true },
+      { src: "images/stylesync/stylesync1.png", caption: "Sign-in page" },
+      { src: "images/stylesync/stylesync2.png", caption: "Account creation with style profile" },
     ],
   },
   sip: {
