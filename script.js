@@ -162,7 +162,7 @@ const PROJECTS = {
       "Consensus confidence across EMA, MACD, RSI, Stochastics, Bollinger Bands, sentiment and fundamentals",
     ],
     tech: ["Next.js", "React", "Tailwind CSS", "Chart.js", "Python", "FastAPI", "WebSockets", "XGBoost", "FinBERT", "Pandas"],
-    links: [{ label: "Visit live site", href: "https://invexo.co.in/", primary: true }, { label: "GitHub", href: GITHUB }],
+    links: [{ label: "Visit live site", href: "https://invexo.co.in/", primary: true }, { label: "GitHub", href: `${GITHUB}/Invexo` }],
     shots: [
       { src: "images/invexo/invexo1.png", caption: "Sign-in page, desktop" },
       { src: "images/invexo/invexo2.png", caption: "Dashboard", mobile: true },
@@ -185,7 +185,7 @@ const PROJECTS = {
       "JWT + bcrypt authentication on a layered FastAPI modular monolith",
     ],
     tech: ["React 19", "Vite", "TypeScript", "Tailwind CSS", "TanStack Query", "FastAPI", "SQLAlchemy", "PyTorch", "CLIP", "OpenCV"],
-    links: [{ label: "GitHub", href: GITHUB, primary: true }],
+    links: [{ label: "GitHub", href: `${GITHUB}/Style-Sync`, primary: true }],
     shots: [
       { src: "images/stylesync/stylesync1.png", caption: "Sign-in page" },
       { src: "images/stylesync/stylesync2.png", caption: "Account creation with style profile" },
@@ -203,7 +203,7 @@ const PROJECTS = {
       "Instant recalculation as inputs change",
     ],
     tech: ["React", "JavaScript", "CSS"],
-    links: [{ label: "GitHub", href: GITHUB, primary: true }],
+    links: [{ label: "GitHub", href: `${GITHUB}/SIP-SWP-Calculator`, primary: true }],
     shots: [],
     comingSoon: "Under active development — Preview dropping soon",
   },
@@ -219,7 +219,7 @@ const PROJECTS = {
       "Full-bleed background imagery with a centred sign-up card",
     ],
     tech: ["HTML", "CSS", "JavaScript"],
-    links: [{ label: "GitHub", href: GITHUB, primary: true }],
+    links: [{ label: "GitHub", href: `${GITHUB}/FIT-INDIA-PROJECT`, primary: true }],
     shots: [
       { src: "images/fitindia/1.png", caption: "Membership page, desktop" },
       // { src: "images/fitindia/2.png", caption: "Membership page, mobile", mobile: true },
@@ -227,7 +227,7 @@ const PROJECTS = {
   },
   portfolio: {
     tag: "Web · Live",
-    title: "Personal Portfolio",
+    title: "Personal Portfolio Website",
     desc: [
       "The site you're on right now. A hand-built, dependency-free portfolio written in plain HTML, CSS and JavaScript, designed to load fast and read well on any screen.",
     ],
@@ -240,7 +240,7 @@ const PROJECTS = {
     ],
     tech: ["HTML", "CSS", "JavaScript", "GitHub Pages"],
     links: [
-      { label: "GitHub", href: "https://github.com/09lakshya/my-portfolio", primary: true },
+      { label: "GitHub", href: `${GITHUB}/my-portfolio`, primary: true },
     ],
     shots: [],
     comingSoon: "You're looking at it ✦",
