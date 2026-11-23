@@ -149,7 +149,7 @@ section { padding: clamp(3.5rem, 9vh, 6rem) 0 2rem; }
 .cards::-webkit-scrollbar { height: 6px; }
 .cards::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
 .cards::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-.cards > .card { flex: 0 0 clamp(16rem, 42%, 26rem); scroll-snap-align: start; }
+.cards > .card { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; }
 .cards.dragging { scroll-snap-type: none; scroll-behavior: auto; cursor: grabbing; user-select: none; }
 .cards.dragging .card { pointer-events: none; }
 .carousel-nav { display: flex; justify-content: flex-end; gap: .6rem; margin-top: .4rem; }
@@ -160,11 +160,10 @@ section { padding: clamp(3.5rem, 9vh, 6rem) 0 2rem; }
 }
 .car-btn:hover:not(:disabled), .car-btn:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
 .car-btn:disabled { opacity: .35; cursor: default; }
-@media (max-width: 720px) { .cards > .card { flex-basis: 85%; } }
 /* Carousel motion: staggered slide-in when the section appears,
    cards partly scrolled out of view fade and shrink slightly */
-.cards > .card { transition: transform .35s ease, opacity .35s ease, border-color .25s, box-shadow .25s; }
-.cards > .card.off:not(:hover):not(:focus-visible) { opacity: .45; transform: scale(.96); }
+.cards > .card { transition: transform .5s ease, opacity .5s ease, border-color .25s, box-shadow .25s; }
+.cards > .card.off:not(:hover):not(:focus-visible) { opacity: 0; transform: scale(.94); }
 #projects:not(.visible) .cards > .card { opacity: 0; }
 #projects.visible .cards > .card { animation: card-in .6s cubic-bezier(.2, .7, .2, 1) backwards; animation-delay: calc(var(--i, 0) * 90ms + 150ms); }
 @keyframes card-in { from { opacity: 0; transform: translateX(48px); } }
