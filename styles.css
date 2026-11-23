@@ -161,6 +161,13 @@ section { padding: clamp(3.5rem, 9vh, 6rem) 0 2rem; }
 .car-btn:hover:not(:disabled), .car-btn:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
 .car-btn:disabled { opacity: .35; cursor: default; }
 @media (max-width: 720px) { .cards > .card { flex-basis: 85%; } }
+/* Carousel motion: staggered slide-in when the section appears,
+   cards partly scrolled out of view fade and shrink slightly */
+.cards > .card { transition: transform .35s ease, opacity .35s ease, border-color .25s, box-shadow .25s; }
+.cards > .card.off:not(:hover):not(:focus-visible) { opacity: .45; transform: scale(.96); }
+#projects:not(.visible) .cards > .card { opacity: 0; }
+#projects.visible .cards > .card { animation: card-in .6s cubic-bezier(.2, .7, .2, 1) backwards; animation-delay: calc(var(--i, 0) * 90ms + 150ms); }
+@keyframes card-in { from { opacity: 0; transform: translateX(48px); } }
 .card {
   background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--radius);
   padding: clamp(1.1rem, 3vw, 1.6rem); display: flex; flex-direction: column; gap: .8rem;
@@ -205,6 +212,8 @@ footer {
 .reveal.visible { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .cards { scroll-behavior: auto; }
+  .cards > .card { animation: none !important; transition: none; }
+  .cards > .card.off:not(:hover):not(:focus-visible) { transform: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
   html { scroll-behavior: auto; }
   .caret { animation: none; }

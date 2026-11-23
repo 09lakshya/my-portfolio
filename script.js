@@ -359,6 +359,13 @@ document.querySelectorAll(".card[data-project]").forEach((card) => {
   if (!track) return;
   const btns = document.querySelectorAll(".car-btn");
 
+  // Stagger index for the slide-in, and dim cards that are mostly out of view
+  const cardIO = new IntersectionObserver(
+    (entries) => entries.forEach((e) => e.target.classList.toggle("off", e.intersectionRatio < 0.6)),
+    { root: track, threshold: [0, 0.6, 1] }
+  );
+  track.querySelectorAll(".card").forEach((c, i) => { c.style.setProperty("--i", i); cardIO.observe(c); });
+
   const step = () => {
     const card = track.querySelector(".card");
     const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
