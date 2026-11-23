@@ -353,93 +353,124 @@ document.querySelectorAll(".card[data-project]").forEach((card) => {
   });
 });
 
-// ---------- HORIZONTAL PROJECT CAROUSEL ----------
+// ---------- PROJECT CAROUSEL (one card at a time) ----------
+// Cards are stacked in place; a fractional position `pos` is eased toward the
+// target index every animation frame and each card is styled from its distance
+// to `pos`, so the crossfade/blur is continuous and never waits on native scroll.
 (() => {
   const track = document.getElementById("project-track");
   if (!track) return;
-  const btns = document.querySelectorAll(".car-btn");
-
   const cards = [...track.querySelectorAll(".card")];
-  cards.forEach((c, i) => c.style.setProperty("--i", i));
+  const btns = document.querySelectorAll(".car-btn");
+  const nav = document.querySelector(".carousel-nav");
   const calm = matchMedia("(prefers-reduced-motion: reduce)");
+  const last = cards.length - 1;
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  cards.forEach((c, i) => c.style.setProperty("--i", i));
 
-  // Continuous scroll-linked transition: each card is pulled back toward the
-  // centre and faded/blurred/scaled by its distance, so cards crossfade in
-  // place instead of sliding behind the clipped edge.
-  let raf = 0;
-  const paint = () => {
-    raf = 0;
-    const center = track.scrollLeft + track.clientWidth / 2;
-    cards.forEach((c) => {
-      const w = c.offsetWidth + (parseFloat(getComputedStyle(track).columnGap) || 0);
-      const d = Math.max(-1.5, Math.min(1.5, (c.offsetLeft - track.offsetLeft + c.offsetWidth / 2 - center) / w));
+  let pos = 0, target = 0, raf = 0, prevT = 0, dragging = false;
+
+  const render = () => {
+    const still = calm.matches;
+    const near = Math.round(pos);
+    cards.forEach((c, i) => {
+      const d = i - pos;                       // <0: already passed, >0: upcoming
       const a = Math.min(1, Math.abs(d));
-      const ease = a * a * (3 - 2 * a); // smoothstep
-      const still = calm.matches;
-      c.style.setProperty("--tx", `${(-d * w + (still ? 0 : d * 40)).toFixed(1)}px`);
-      c.style.setProperty("--o", (1 - ease).toFixed(3));
-      c.style.setProperty("--s", still ? 1 : (1 - ease * 0.08).toFixed(3));
-      c.style.setProperty("--b", `${still ? 0 : (ease * 10).toFixed(1)}px`);
-      c.style.zIndex = a < 0.5 ? 2 : 1;
-      c.style.pointerEvents = a < 0.5 ? "" : "none";
-      c.tabIndex = a < 0.5 ? 0 : -1;
+      const e = a * a * (3 - 2 * a);           // smoothstep for soft in/out
+      c.style.setProperty("--tx", `${still ? 0 : (clamp(d, -1, 1) * 56).toFixed(2)}px`);
+      c.style.setProperty("--s", still ? 1 : (1 - e * 0.07).toFixed(4));
+      c.style.setProperty("--o", (1 - e).toFixed(4));
+      c.style.setProperty("--b", `${still ? 0 : (e * 8).toFixed(2)}px`);
+      c.style.visibility = a >= 1 ? "hidden" : "";
+      c.style.zIndex = i === near ? 2 : 1;
+      c.style.pointerEvents = i === near ? "" : "none";
+      c.tabIndex = i === near ? 0 : -1;
+      c.setAttribute("aria-hidden", i === near ? "false" : "true");
     });
+    btns.forEach((b) => { b.disabled = b.dataset.dir === "-1" ? target <= 0 : target >= last; });
   };
-  const schedule = () => { if (!raf) raf = requestAnimationFrame(paint); };
-  track.addEventListener("scroll", schedule, { passive: true });
-  addEventListener("resize", schedule);
-  paint();
 
-  const step = () => {
-    const card = track.querySelector(".card");
-    const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
-    return card ? card.getBoundingClientRect().width + gap : track.clientWidth * 0.8;
+  // Frame-rate independent exponential ease toward the target (interruptible)
+  const tick = (t) => {
+    const dt = prevT ? Math.min(64, t - prevT) : 16;
+    prevT = t;
+    if (!dragging) {
+      const k = 1 - Math.exp(-dt / (calm.matches ? 60 : 140));
+      pos += (target - pos) * k;
+      if (Math.abs(target - pos) < 0.0005) pos = target;
+    }
+    render();
+    raf = pos !== target || dragging ? requestAnimationFrame(tick) : 0;
+    if (!raf) prevT = 0;
   };
-  const update = () => {
-    const max = track.scrollWidth - track.clientWidth - 2;
-    btns.forEach((b) => {
-      b.disabled = b.dataset.dir === "-1" ? track.scrollLeft <= 2 : track.scrollLeft >= max;
-    });
-    document.querySelector(".carousel-nav").hidden = max <= 0;
-  };
-  btns.forEach((b) => b.addEventListener("click", () => track.scrollBy({ left: step() * +b.dataset.dir })));
-  track.addEventListener("scroll", update, { passive: true });
-  addEventListener("resize", update);
-  update();
+  const kick = () => { if (!raf) raf = requestAnimationFrame(tick); };
+  const go = (i) => { target = clamp(i, 0, last); kick(); };
 
-  // Arrow keys move between cards when a card is focused
+  nav.hidden = last < 1;
+  btns.forEach((b) => b.addEventListener("click", () => go(target + +b.dataset.dir)));
+  render();
+
+  // Arrow keys when a card is focused
   track.addEventListener("keydown", (e) => {
     if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
-    const cards = [...track.querySelectorAll(".card")];
-    const i = cards.indexOf(document.activeElement);
-    if (i < 0) return;
     e.preventDefault();
-    const next = cards[i + (e.key === "ArrowRight" ? 1 : -1)];
-    if (next) { next.focus({ preventScroll: true }); next.scrollIntoView({ inline: "start", block: "nearest" }); }
+    go(target + (e.key === "ArrowRight" ? 1 : -1));
+    cards[target].focus({ preventScroll: true });
   });
 
-  // Click-and-drag scrolling with a mouse (touch/trackpad scroll natively)
-  let startX = 0, startLeft = 0, moved = false, down = false;
+  // Drag / swipe (mouse, pen, touch). Position follows the finger 1:1.
+  let startX = 0, startY = 0, startPos = 0, moved = false, down = false, lastX = 0, lastT = 0, vel = 0;
   track.addEventListener("pointerdown", (e) => {
-    if (e.pointerType !== "mouse" || e.button !== 0) return;
-    down = true; moved = false; startX = e.clientX; startLeft = track.scrollLeft;
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    down = true; moved = false;
+    startX = lastX = e.clientX; startY = e.clientY; lastT = e.timeStamp; vel = 0;
+    startPos = pos;
   });
   addEventListener("pointermove", (e) => {
     if (!down) return;
-    const dx = e.clientX - startX;
-    if (!moved && Math.abs(dx) > 6) { moved = true; track.classList.add("dragging"); }
-    if (moved) track.scrollLeft = startLeft - dx;
+    const dx = e.clientX - startX, dy = e.clientY - startY;
+    if (!moved) {
+      if (Math.abs(dx) < 8) return;
+      if (Math.abs(dy) > Math.abs(dx)) { down = false; return; }   // vertical: let page scroll
+      moved = dragging = true; track.classList.add("dragging"); kick();
+    }
+    const w = track.clientWidth || 1;
+    let p = startPos - dx / w;
+    if (p < 0) p *= 0.3; else if (p > last) p = last + (p - last) * 0.3;  // rubber-band ends
+    pos = p;
+    const dt = e.timeStamp - lastT;
+    if (dt > 0) vel = (e.clientX - lastX) / dt;
+    lastX = e.clientX; lastT = e.timeStamp;
   });
-  addEventListener("pointerup", () => {
+  const release = () => {
     if (!down) return;
     down = false;
-    if (moved) {
-      track.classList.remove("dragging");
-      // swallow the click that follows a drag so the modal doesn't open
-      const swallow = (ev) => { ev.stopPropagation(); ev.preventDefault(); };
-      track.addEventListener("click", swallow, { capture: true, once: true });
-      setTimeout(() => track.removeEventListener("click", swallow, { capture: true }), 0);
-      setTimeout(update, 50);
+    if (!moved) return;
+    dragging = false; track.classList.remove("dragging");
+    const dx = lastX - startX;
+    let i = Math.round(pos);
+    if (i === Math.round(startPos)) {
+      if (dx < -40 || vel < -0.4) i++;
+      else if (dx > 40 || vel > 0.4) i--;
     }
-  });
+    go(i);
+    const swallow = (ev) => { ev.stopPropagation(); ev.preventDefault(); };
+    track.addEventListener("click", swallow, { capture: true, once: true });
+    setTimeout(() => track.removeEventListener("click", swallow, { capture: true }), 0);
+  };
+  addEventListener("pointerup", release);
+  addEventListener("pointercancel", release);
+
+  // Horizontal trackpad / shift+wheel: one card per gesture
+  let acc = 0, lock = 0;
+  track.addEventListener("wheel", (e) => {
+    const dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.shiftKey ? e.deltaY : 0;
+    if (!dx) return;
+    e.preventDefault();
+    clearTimeout(lock);
+    lock = setTimeout(() => { acc = 0; }, 180);
+    if (acc === Infinity) return;
+    acc += dx;
+    if (Math.abs(acc) > 30) { go(target + Math.sign(acc)); acc = Infinity; }
+  }, { passive: false });
 })();
