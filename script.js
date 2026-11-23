@@ -192,7 +192,7 @@ const PROJECTS = {
     ],
   },
   sip: {
-    tag: "Finance tool",
+    tag: "Finance tool · In the works",
     title: "SIP / SWP Calculator",
     desc: [
       "A web calculator for mutual-fund planning. It estimates how a Systematic Investment Plan (SIP) grows over time, and how long a corpus lasts under a Systematic Withdrawal Plan (SWP).",
@@ -205,6 +205,7 @@ const PROJECTS = {
     tech: ["React", "JavaScript", "CSS"],
     links: [{ label: "GitHub", href: GITHUB, primary: true }],
     shots: [],
+    comingSoon: "Currently in the final build phase. A live preview is launching soon.",
   },
   fitindia: {
     tag: "Web",
@@ -266,6 +267,7 @@ function openProject(key) {
   const has = shots.length > 0;
   img.hidden = !has;
   empty.hidden = has;
+  empty.textContent = p.comingSoon || "Screenshots coming soon";
   modal.querySelectorAll(".g-nav").forEach((b) => (b.hidden = shots.length < 2));
   closeViewer();
   $("pm-caption").textContent = "";
