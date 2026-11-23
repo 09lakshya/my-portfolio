@@ -225,6 +225,26 @@ const PROJECTS = {
       // { src: "images/fitindia/2.png", caption: "Membership page, mobile", mobile: true },
     ],
   },
+  portfolio: {
+    tag: "Web · Live",
+    title: "Personal Portfolio",
+    desc: [
+      "The site you're on right now. A hand-built, dependency-free portfolio written in plain HTML, CSS and JavaScript, designed to load fast and read well on any screen.",
+    ],
+    features: [
+      "Interactive animated canvas background that responds to the cursor",
+      "Scroll-triggered section reveals using IntersectionObserver",
+      "Project detail modal with screenshot gallery, full-screen viewer and swipe support",
+      "Responsive layout with a collapsible mobile menu",
+      "Hosted on GitHub Pages",
+    ],
+    tech: ["HTML", "CSS", "JavaScript", "GitHub Pages"],
+    links: [
+      { label: "GitHub", href: "https://github.com/09lakshya/my-portfolio", primary: true },
+    ],
+    shots: [],
+    comingSoon: "You're looking at it ✦",
+  },
 };
 
 const modal = document.getElementById("project-modal");
