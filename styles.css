@@ -136,7 +136,7 @@ section { padding: clamp(3.5rem, 9vh, 6rem) 0 2rem; }
 .t-item p:not(.org) { color: var(--muted); }
 
 /* PROJECT CARDS — horizontal scroll track with snap points */
-.carousel { position: relative; }
+.carousel { position: relative; width: min(100%, 26rem); margin-inline: auto; }
 .cards {
   display: flex; gap: 1.3rem;
   overflow-x: auto; overflow-y: hidden;
@@ -152,7 +152,7 @@ section { padding: clamp(3.5rem, 9vh, 6rem) 0 2rem; }
 .cards > .card { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; }
 .cards.dragging { scroll-snap-type: none; scroll-behavior: auto; cursor: grabbing; user-select: none; }
 .cards.dragging .card { pointer-events: none; }
-.carousel-nav { display: flex; justify-content: flex-end; gap: .6rem; margin-top: .4rem; }
+.carousel-nav { display: flex; justify-content: center; gap: .6rem; margin-top: .4rem; }
 .car-btn {
   width: 2.6rem; height: 2.6rem; border-radius: 50%;
   background: var(--bg-2); border: 1px solid var(--line); color: var(--text);
