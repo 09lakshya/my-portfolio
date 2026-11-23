@@ -118,7 +118,8 @@
     <!-- PROJECTS -->
     <section id="projects" class="reveal">
       <h3 class="section-title"><span class="mono">04.</span> Projects</h3>
-      <div class="cards">
+      <div class="carousel">
+      <div class="cards" id="project-track" tabindex="-1" aria-label="Projects (scroll horizontally)">
         <article tabindex="0" role="button" data-project="invexo" class="card featured">
           <div class="card-top">
             <span class="mono tag">Featured · FinTech ML</span>
@@ -180,6 +181,11 @@
           <ul class="chips"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
           <span class="more mono">View details →</span>
         </article>
+      </div>
+      <div class="carousel-nav">
+        <button type="button" class="car-btn" data-dir="-1" aria-controls="project-track" aria-label="Previous projects">←</button>
+        <button type="button" class="car-btn" data-dir="1" aria-controls="project-track" aria-label="Next projects">→</button>
+      </div>
       </div>
     </section>
 

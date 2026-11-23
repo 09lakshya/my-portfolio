@@ -352,3 +352,63 @@ document.querySelectorAll(".card[data-project]").forEach((card) => {
     if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openProject(card.dataset.project); }
   });
 });
+
+// ---------- HORIZONTAL PROJECT CAROUSEL ----------
+(() => {
+  const track = document.getElementById("project-track");
+  if (!track) return;
+  const btns = document.querySelectorAll(".car-btn");
+
+  const step = () => {
+    const card = track.querySelector(".card");
+    const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+    return card ? card.getBoundingClientRect().width + gap : track.clientWidth * 0.8;
+  };
+  const update = () => {
+    const max = track.scrollWidth - track.clientWidth - 2;
+    btns.forEach((b) => {
+      b.disabled = b.dataset.dir === "-1" ? track.scrollLeft <= 2 : track.scrollLeft >= max;
+    });
+    document.querySelector(".carousel-nav").hidden = max <= 0;
+  };
+  btns.forEach((b) => b.addEventListener("click", () => track.scrollBy({ left: step() * +b.dataset.dir })));
+  track.addEventListener("scroll", update, { passive: true });
+  addEventListener("resize", update);
+  update();
+
+  // Arrow keys move between cards when a card is focused
+  track.addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    const cards = [...track.querySelectorAll(".card")];
+    const i = cards.indexOf(document.activeElement);
+    if (i < 0) return;
+    e.preventDefault();
+    const next = cards[i + (e.key === "ArrowRight" ? 1 : -1)];
+    if (next) { next.focus({ preventScroll: true }); next.scrollIntoView({ inline: "start", block: "nearest" }); }
+  });
+
+  // Click-and-drag scrolling with a mouse (touch/trackpad scroll natively)
+  let startX = 0, startLeft = 0, moved = false, down = false;
+  track.addEventListener("pointerdown", (e) => {
+    if (e.pointerType !== "mouse" || e.button !== 0) return;
+    down = true; moved = false; startX = e.clientX; startLeft = track.scrollLeft;
+  });
+  addEventListener("pointermove", (e) => {
+    if (!down) return;
+    const dx = e.clientX - startX;
+    if (!moved && Math.abs(dx) > 6) { moved = true; track.classList.add("dragging"); }
+    if (moved) track.scrollLeft = startLeft - dx;
+  });
+  addEventListener("pointerup", () => {
+    if (!down) return;
+    down = false;
+    if (moved) {
+      track.classList.remove("dragging");
+      // swallow the click that follows a drag so the modal doesn't open
+      const swallow = (ev) => { ev.stopPropagation(); ev.preventDefault(); };
+      track.addEventListener("click", swallow, { capture: true, once: true });
+      setTimeout(() => track.removeEventListener("click", swallow, { capture: true }), 0);
+      setTimeout(update, 50);
+    }
+  });
+})();

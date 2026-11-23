@@ -135,8 +135,32 @@ section { padding: clamp(3.5rem, 9vh, 6rem) 0 2rem; }
 .org { color: var(--accent-2); font-size: .95rem; margin-bottom: .3rem; }
 .t-item p:not(.org) { color: var(--muted); }
 
-/* PROJECT CARDS — auto-fit columns: 1 on phones, 2 on laptops, 2–3 on wide screens */
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 1.3rem; }
+/* PROJECT CARDS — horizontal scroll track with snap points */
+.carousel { position: relative; }
+.cards {
+  display: flex; gap: 1.3rem;
+  overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory; scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  /* room so hover lift / shadow / focus ring aren't clipped */
+  padding: .6rem .3rem 1.4rem; margin: -.6rem -.3rem 0;
+  scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+}
+.cards::-webkit-scrollbar { height: 6px; }
+.cards::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+.cards::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+.cards > .card { flex: 0 0 clamp(16rem, 42%, 26rem); scroll-snap-align: start; }
+.cards.dragging { scroll-snap-type: none; scroll-behavior: auto; cursor: grabbing; user-select: none; }
+.cards.dragging .card { pointer-events: none; }
+.carousel-nav { display: flex; justify-content: flex-end; gap: .6rem; margin-top: .4rem; }
+.car-btn {
+  width: 2.6rem; height: 2.6rem; border-radius: 50%;
+  background: var(--bg-2); border: 1px solid var(--line); color: var(--text);
+  font-size: 1.1rem; cursor: pointer; transition: border-color .2s, color .2s, opacity .2s;
+}
+.car-btn:hover:not(:disabled), .car-btn:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+.car-btn:disabled { opacity: .35; cursor: default; }
+@media (max-width: 720px) { .cards > .card { flex-basis: 85%; } }
 .card {
   background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--radius);
   padding: clamp(1.1rem, 3vw, 1.6rem); display: flex; flex-direction: column; gap: .8rem;
@@ -180,6 +204,7 @@ footer {
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
 .reveal.visible { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
+  .cards { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
   html { scroll-behavior: auto; }
   .caret { animation: none; }
@@ -233,7 +258,6 @@ footer {
 /* Large / ultra-wide displays */
 @media (min-width: 1800px) {
   :root { --max: 76rem; }
-  .cards { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* ---------- CLICKABLE PROJECT CARDS ---------- */
