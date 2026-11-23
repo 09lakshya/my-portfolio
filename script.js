@@ -359,12 +359,36 @@ document.querySelectorAll(".card[data-project]").forEach((card) => {
   if (!track) return;
   const btns = document.querySelectorAll(".car-btn");
 
-  // Stagger index for the slide-in, and dim cards that are mostly out of view
-  const cardIO = new IntersectionObserver(
-    (entries) => entries.forEach((e) => e.target.classList.toggle("off", e.intersectionRatio < 0.6)),
-    { root: track, threshold: [0, 0.6, 1] }
-  );
-  track.querySelectorAll(".card").forEach((c, i) => { c.style.setProperty("--i", i); cardIO.observe(c); });
+  const cards = [...track.querySelectorAll(".card")];
+  cards.forEach((c, i) => c.style.setProperty("--i", i));
+  const calm = matchMedia("(prefers-reduced-motion: reduce)");
+
+  // Continuous scroll-linked transition: each card is pulled back toward the
+  // centre and faded/blurred/scaled by its distance, so cards crossfade in
+  // place instead of sliding behind the clipped edge.
+  let raf = 0;
+  const paint = () => {
+    raf = 0;
+    const center = track.scrollLeft + track.clientWidth / 2;
+    cards.forEach((c) => {
+      const w = c.offsetWidth + (parseFloat(getComputedStyle(track).columnGap) || 0);
+      const d = Math.max(-1.5, Math.min(1.5, (c.offsetLeft - track.offsetLeft + c.offsetWidth / 2 - center) / w));
+      const a = Math.min(1, Math.abs(d));
+      const ease = a * a * (3 - 2 * a); // smoothstep
+      const still = calm.matches;
+      c.style.setProperty("--tx", `${(-d * w + (still ? 0 : d * 40)).toFixed(1)}px`);
+      c.style.setProperty("--o", (1 - ease).toFixed(3));
+      c.style.setProperty("--s", still ? 1 : (1 - ease * 0.08).toFixed(3));
+      c.style.setProperty("--b", `${still ? 0 : (ease * 10).toFixed(1)}px`);
+      c.style.zIndex = a < 0.5 ? 2 : 1;
+      c.style.pointerEvents = a < 0.5 ? "" : "none";
+      c.tabIndex = a < 0.5 ? 0 : -1;
+    });
+  };
+  const schedule = () => { if (!raf) raf = requestAnimationFrame(paint); };
+  track.addEventListener("scroll", schedule, { passive: true });
+  addEventListener("resize", schedule);
+  paint();
 
   const step = () => {
     const card = track.querySelector(".card");

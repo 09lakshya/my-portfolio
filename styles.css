@@ -140,7 +140,7 @@ section { padding: clamp(3.5rem, 9vh, 6rem) 0 2rem; }
 .cards {
   display: flex; gap: 1.3rem;
   overflow-x: auto; overflow-y: hidden;
-  scroll-snap-type: x mandatory; scroll-behavior: smooth;
+  scroll-snap-type: x mandatory; scroll-behavior: smooth; scroll-padding-inline: .3rem;
   overscroll-behavior-x: contain;
   /* room so hover lift / shadow / focus ring aren't clipped */
   padding: .6rem .3rem 1.4rem; margin: -.6rem -.3rem 0;
@@ -160,10 +160,16 @@ section { padding: clamp(3.5rem, 9vh, 6rem) 0 2rem; }
 }
 .car-btn:hover:not(:disabled), .car-btn:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
 .car-btn:disabled { opacity: .35; cursor: default; }
-/* Carousel motion: staggered slide-in when the section appears,
-   cards partly scrolled out of view fade and shrink slightly */
-.cards > .card { transition: transform .5s ease, opacity .5s ease, border-color .25s, box-shadow .25s; }
-.cards > .card.off:not(:hover):not(:focus-visible) { opacity: 0; transform: scale(.94); }
+/* Carousel motion: staggered slide-in when the section appears; while scrolling,
+   script.js sets --tx/--s/--o/--b per card from its distance to the centre so
+   cards crossfade, blur and scale continuously instead of being clipped */
+.cards > .card {
+  transform: translateX(var(--tx, 0px)) scale(var(--s, 1));
+  opacity: var(--o, 1); filter: blur(var(--b, 0px));
+  transition: translate .25s ease, border-color .25s, box-shadow .25s;
+  will-change: transform, opacity, filter;
+}
+.cards > .card:hover { transform: translateX(var(--tx, 0px)) scale(var(--s, 1)); translate: 0 -4px; }
 #projects:not(.visible) .cards > .card { opacity: 0; }
 #projects.visible .cards > .card { animation: card-in .6s cubic-bezier(.2, .7, .2, 1) backwards; animation-delay: calc(var(--i, 0) * 90ms + 150ms); }
 @keyframes card-in { from { opacity: 0; transform: translateX(48px); } }
@@ -212,7 +218,6 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   .cards { scroll-behavior: auto; }
   .cards > .card { animation: none !important; transition: none; }
-  .cards > .card.off:not(:hover):not(:focus-visible) { transform: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
   html { scroll-behavior: auto; }
   .caret { animation: none; }
@@ -386,4 +391,5 @@ body.modal-open { overflow: hidden; }
 /* Touch devices: no sticky hover lift */
 @media (hover: none) {
   .btn:hover, .card:hover { transform: none; }
+  .cards > .card:hover { translate: none; }
 }
