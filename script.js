@@ -221,8 +221,8 @@ const PROJECTS = {
     tech: ["HTML", "CSS", "JavaScript"],
     links: [{ label: "GitHub", href: `${GITHUB}/FIT-INDIA-PROJECT`, primary: true }],
     shots: [
-      { src: "images/fitindia/1.png", caption: "Membership page, desktop" },
-      // { src: "images/fitindia/2.png", caption: "Membership page, mobile", mobile: true },
+      { src: "images/fitindia/fip1.png", caption: "Membership page, desktop" },
+      { src: "images/fitindia/fip2.png", caption: "Exersice and Diet Plan", mobile: true },
     ],
   },
   portfolio: {
@@ -461,16 +461,34 @@ document.querySelectorAll(".card[data-project]").forEach((card) => {
   addEventListener("pointerup", release);
   addEventListener("pointercancel", release);
 
-  // Horizontal trackpad / shift+wheel: one card per gesture
-  let acc = 0, lock = 0;
+  // Native image/link drag would steal the pointer (pointercancel) mid-swipe
+  track.addEventListener("dragstart", (e) => e.preventDefault());
+
+  // Horizontal trackpad / shift+wheel: one card per gesture.
+  // Trackpads keep emitting decaying "momentum" events after a swipe, so a new
+  // swipe can't be detected by waiting for silence alone. While locked, we also
+  // unlock when the delta jumps up sharply (a fresh finger swipe on top of the
+  // fading momentum) or when the direction reverses.
+  let acc = 0, locked = false, idle = 0, firedAt = 0, lastAbs = 0, lastSign = 0;
   track.addEventListener("wheel", (e) => {
     const dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.shiftKey ? e.deltaY : 0;
     if (!dx) return;
     e.preventDefault();
-    clearTimeout(lock);
-    lock = setTimeout(() => { acc = 0; }, 180);
-    if (acc === Infinity) return;
+    const abs = Math.abs(dx), sign = Math.sign(dx);
+    clearTimeout(idle);
+    idle = setTimeout(() => { locked = false; acc = 0; lastAbs = 0; }, 120);
+    if (locked) {
+      const since = e.timeStamp - firedAt;
+      const fresh = since > 220 && abs > 6 && (abs > lastAbs * 1.6 || sign !== lastSign);
+      lastAbs = abs; lastSign = sign;
+      if (!fresh) return;
+      locked = false; acc = 0;
+    }
+    lastAbs = abs; lastSign = sign;
     acc += dx;
-    if (Math.abs(acc) > 30) { go(target + Math.sign(acc)); acc = Infinity; }
+    if (Math.abs(acc) > 30) {
+      go(target + Math.sign(acc));
+      locked = true; firedAt = e.timeStamp; acc = 0;
+    }
   }, { passive: false });
 })();
