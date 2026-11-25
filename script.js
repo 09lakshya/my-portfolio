@@ -17,40 +17,6 @@ menuBtn.addEventListener("click", () => {
 document.querySelectorAll("#site-nav a").forEach((a) => a.addEventListener("click", closeMenu));
 addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
 
-// Email links ([data-compose]) open Gmail compose.
-// Each link's href is a Gmail web-compose URL (to= recipient, su= subject):
-//   Desktop -> that URL opens in a new tab (default link behaviour).
-//   Android -> Gmail app compose; falls back to Gmail web if the app isn't installed.
-//   iOS     -> Gmail app compose; falls back to Gmail web if the app isn't installed.
-const ua = navigator.userAgent;
-const isAndroid = /Android/i.test(ua);
-const isIOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-const enc = encodeURIComponent;
-
-document.querySelectorAll("[data-compose]").forEach((link) => {
-  link.addEventListener("click", (e) => {
-    if (!isAndroid && !isIOS) return;
-    e.preventDefault();
-    const webUrl = link.href;
-    const params = new URL(webUrl).searchParams;
-    const to = params.get("to") || "";
-    const subject = params.get("su") || "";
-
-    if (isAndroid) {
-      location.href =
-        `intent:${to}?subject=${enc(subject)}` +
-        `#Intent;scheme=mailto;package=com.google.android.gm;` +
-        `S.browser_fallback_url=${enc(webUrl)};end`;
-    } else {
-      const fallback = setTimeout(() => { if (!document.hidden) location.href = webUrl; }, 1500);
-      const cancel = () => clearTimeout(fallback);
-      document.addEventListener("visibilitychange", cancel, { once: true });
-      addEventListener("pagehide", cancel, { once: true });
-      location.href = `googlegmail://co?to=${enc(to)}&subject=${enc(subject)}`;
-    }
-  });
-});
-
 // Typing effect
 const phrases = [
   "AI-powered products",

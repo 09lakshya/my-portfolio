@@ -4,7 +4,7 @@ Personal portfolio website: a static site built with HTML, CSS and vanilla JavaS
 
 - Responsive from small phones to 4K displays
 - Project cards open a details popup with a screenshot gallery
-- Contact links open Gmail compose (the Gmail app on mobile)
+- Contact links open a new email to lakshyahindocha@outlook.com in the visitor's mail app
 
 ## Run locally
 Open `index.html` in a browser.
